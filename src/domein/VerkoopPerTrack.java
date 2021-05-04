@@ -6,7 +6,6 @@ public class VerkoopPerTrack {
 	private String ISRC;
 	private String EAN;
 	private String trackname;
-	private String releaseName;
 	private double brutoOpbrengst = 0.0;
 	private double mastering = 0.0;
 	private double promo = 0.0;
@@ -19,20 +18,11 @@ public class VerkoopPerTrack {
 	private int jaarTot = 0;
 	private int kwartaalTot = 0;
 
-	public String toString() {
-		String tekst = getReleaseName() + ";" + getEAN() + ";" + getISRC() + ";" + getTrackname() + ";"
-				+ getAlbumDownloads() + ";" + getDownloads() + ";" + getStreams() + ";"
-				+ String.format("%.2f", getBrutoOpbrengst()) + ";" + String.format("%.2f", getMastering()) + ";"
-				+ String.format("%.2f", getPromo()) + ";" + String.format("%.2f", getOpbrengst());
-		return tekst;
-	}
-
 	public VerkoopPerTrack(Track track) {
 		this.track = track;
 		this.setISRC(track.getISRC());
 		this.EAN = track.getEAN();
 		this.trackname = track.getTrackname();
-		this.releaseName = track.getReleasename();
 	}
 
 	public void addAlbumDownload(int qty) {
@@ -51,16 +41,8 @@ public class VerkoopPerTrack {
 		return track;
 	}
 
-	public void setTrack(Track track) {
-		this.track = track;
-	}
-
 	public String getEAN() {
 		return EAN;
-	}
-
-	public void setEAN(String eAN) {
-		EAN = eAN;
 	}
 
 	public String getTrackname() {
@@ -137,10 +119,6 @@ public class VerkoopPerTrack {
 
 	public void setBrutoOpbrengst() {
 		brutoOpbrengst = opbrengst;
-	}
-
-	public String getReleaseName() {
-		return releaseName;
 	}
 
 	public int getJaarVanaf() {

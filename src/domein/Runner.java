@@ -13,9 +13,13 @@ public class Runner {
 		// te zoeken release
 		// String eanCode = "5054281527027";
 
-		// geef de resultaten voor 1 code
+		// geef 1 release overzicht 
 		// getReleaseOverzicht(eanCode);
+		
+		// geeft alle release overzichten 
 		// getAlleReleaseOverzichten();
+		
+		// geeft alle artiest én release overzichten
 		getAlleOverzichten();
 
 	}
