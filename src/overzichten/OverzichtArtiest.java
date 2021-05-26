@@ -37,6 +37,9 @@ public class OverzichtArtiest {
 		// textFont = FontFactory.getFont("Elements", BaseFont.IDENTITY_H,
 		// BaseFont.EMBEDDED, 12); //10 is the size
 
+		this.verkoop = verkoop;
+		this.verkopenPerArtiestPerRelease = verkoop.getAlleReleasesPerArtiest();
+		
 		document = new Document();
 		document.setMargins(20, 20, 160, 20);
 
@@ -44,7 +47,7 @@ public class OverzichtArtiest {
 			FileOutputStream fos = new FileOutputStream(FILE + verkoop.getArtiestNaam() + ".pdf");
 			PdfWriter pdfWriter = PdfWriter.getInstance(document, fos);
 
-			HeaderAndFooterPdfPageEventArtist headerAndFooter = new HeaderAndFooterPdfPageEventArtist();
+			HeaderAndFooterPdfPageEventArtist headerAndFooter = new HeaderAndFooterPdfPageEventArtist(verkoop);
 			pdfWriter.setPageEvent(headerAndFooter);
 
 		} catch (FileNotFoundException e) {
@@ -55,8 +58,8 @@ public class OverzichtArtiest {
 			e.printStackTrace();
 		}
 
-		this.verkoop = verkoop;
-		this.verkopenPerArtiestPerRelease = verkoop.getAlleReleasesPerArtiest();
+	//	this.verkoop = verkoop;
+	//	this.verkopenPerArtiestPerRelease = verkoop.getAlleReleasesPerArtiest();
 		document.open();
 		addMetaData(document);
 		try {

@@ -1,11 +1,7 @@
 package overzichten;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Date;
-
 import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
@@ -14,6 +10,8 @@ import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import domein.VerkoopPerArtiest;
 
 /**
  *
@@ -28,10 +26,12 @@ class HeaderAndFooterPdfPageEventArtist extends PdfPageEventHelper {
 	private String IMGARR = "resource/Altered-Reality-Records-logo.png";
 	private Image imageHRR;
 	private Image imageARR;
+	private VerkoopPerArtiest verkoop;
 
 	private Font smallBold = new Font(FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 
-	public HeaderAndFooterPdfPageEventArtist() {
+	public HeaderAndFooterPdfPageEventArtist(VerkoopPerArtiest verkoop) {
+		this.verkoop = verkoop;
 	}
 
 	public void onStartPage(PdfWriter pdfWriter, Document document) {
@@ -44,25 +44,47 @@ class HeaderAndFooterPdfPageEventArtist extends PdfPageEventHelper {
 
 	public void createHeader(PdfWriter pdfWriter, Document document) {
 
-		try {
-			imageHRR = Image.getInstance(IMGHRR);
-			imageARR = Image.getInstance(IMGARR);
-			imageHRR.setAbsolutePosition(40, 685);
-			imageHRR.scaleAbsolute(240, 89);
-			imageARR.setAbsolutePosition(310, 685);
-			imageARR.scaleAbsolute(240, 89);
-			pdfWriter.getDirectContent().addImage(imageHRR);
-			pdfWriter.getDirectContent().addImage(imageARR);
+		if (verkoop.getContainsHRR() && verkoop.getContainsARR()) {
+
+			try {
+				imageHRR = Image.getInstance(IMGHRR);
+				imageARR = Image.getInstance(IMGARR);
+				imageHRR.setAbsolutePosition(40, 685);
+				imageHRR.scaleAbsolute(240, 89);
+				imageARR.setAbsolutePosition(310, 685);
+				imageARR.scaleAbsolute(240, 89);
+				pdfWriter.getDirectContent().addImage(imageHRR);
+				pdfWriter.getDirectContent().addImage(imageARR);
+			}
+
+			catch (Exception e) {
+			}
 		}
-		 catch (DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		if (verkoop.getContainsHRR() && !verkoop.getContainsARR()) {
+
+			try {
+				imageHRR = Image.getInstance(IMGHRR);
+				imageHRR.setAbsolutePosition(56, 675);
+				imageHRR.scaleAbsolute(480, 178);
+				pdfWriter.getDirectContent().addImage(imageHRR);
+			}
+
+			catch (Exception e) {
+			}
+		}
+
+		if (!verkoop.getContainsHRR() && verkoop.getContainsARR()) {
+
+			try {
+				imageARR = Image.getInstance(IMGARR);
+				imageARR.setAbsolutePosition(56, 675);
+				imageARR.scaleAbsolute(480, 178);
+				pdfWriter.getDirectContent().addImage(imageARR);
+			}
+
+			catch (Exception e) {
+			}
 		}
 	}
 
@@ -87,4 +109,5 @@ class HeaderAndFooterPdfPageEventArtist extends PdfPageEventHelper {
 		tableRechts.writeSelectedRows(0, -1, 420, 30, pdfWriter.getDirectContent());
 
 	}
+
 }

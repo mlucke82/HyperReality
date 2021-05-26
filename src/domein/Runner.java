@@ -20,12 +20,12 @@ public class Runner {
 		// getAlleReleaseOverzichten();
 		
 		// geeft alle artiest én release overzichten
-		getAlleOverzichten();
+		getAlleOverzichten(2020, 3);
 
 	}
 
-	private static void getAlleOverzichten() {
-		ArrayList<VerkoopPerRelease> alleVerkopenPerRelease = getAlleReleaseOverzichten();
+	private static void getAlleOverzichten(int year, int quarter) {
+		ArrayList<VerkoopPerRelease> alleVerkopenPerRelease = getAlleReleaseOverzichten(year, quarter);
 		ArrayList<String> alleArtiestCodes;
 		ArrayList<Artiest> alleArtiesten = new ArrayList<>();
 
@@ -44,12 +44,12 @@ public class Runner {
 
 	}
 
-	private static ArrayList<VerkoopPerRelease> getAlleReleaseOverzichten() {
+	private static ArrayList<VerkoopPerRelease> getAlleReleaseOverzichten(int year, int quarter) {
 		ArrayList<VerkoopPerRelease> verkopenPerRelease = new ArrayList<>();
 		try {
 			ArrayList<String> eanCodes = Trackbeheer.getEan();
 			for (int i = 0; i < eanCodes.size(); i++) {
-				verkopenPerRelease.add(getReleaseOverzicht(eanCodes.get(i)));
+				verkopenPerRelease.add(getReleaseOverzicht(eanCodes.get(i), year, quarter));
 			}
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
@@ -58,8 +58,8 @@ public class Runner {
 		return verkopenPerRelease;
 	}
 
-	private static VerkoopPerRelease getReleaseOverzicht(String ean) {
-		VerkoopPerRelease verkoopPerRelease = new VerkoopPerRelease(ean);
+	private static VerkoopPerRelease getReleaseOverzicht(String ean, int year, int quarter) {
+		VerkoopPerRelease verkoopPerRelease = new VerkoopPerRelease(ean, year, quarter);
 		return verkoopPerRelease;
 	}
 

@@ -32,18 +32,16 @@ public class VerkoopPerArtiest {
 		bepaalReedsBetaald();
 		bepaalNogTeBetalen();
 		new OverzichtArtiest(this);
-		
+
 	}
 
 	private void getAlleArtiestOverzichten() {
 		for (int i = 0; i < alleVerkopenPerRelease.size(); i++) {
 			VerkoopPerRelease verkoop = alleVerkopenPerRelease.get(i);
-		
-			
+
 			for (int j = 0; j < verkoop.verkopenPerArtiestPerRelease.size(); j++) {
 				VerkoopPerArtiestPerRelease verkoopPerArtiestPerRelease = verkoop.verkopenPerArtiestPerRelease.get(j);
-				//System.out.println(verkoopPerArtiestPerRelease.getEan() + "vaag");
-				
+	
 				if (verkoopPerArtiestPerRelease.getArtiestCode().equals(artiestCode)) {
 					alleReleasesPerArtiest.add(verkoopPerArtiestPerRelease);
 					setDatumVanaf(alleVerkopenPerRelease.get(i).getJaarVanaf(),
@@ -86,7 +84,7 @@ public class VerkoopPerArtiest {
 	}
 
 	public void setDatumTot(int year, int quarter) {
-		
+
 		if (this.jaarTot == 0) {
 			this.jaarTot = year;
 			this.kwartaalTot = quarter;
@@ -179,14 +177,17 @@ public class VerkoopPerArtiest {
 	public ArrayList<VerkoopPerArtiestPerRelease> getAlleReleasesPerArtiest() {
 		return alleReleasesPerArtiest;
 	}
-	
+
 	public void setBooleans(VerkoopPerRelease verkoop) {
 		String hrr = "H";
 		String arr = "A";
-		containsHRR = (verkoop.getReleaseName().charAt(0)+"").equals(hrr);
-		containsARR = (verkoop.getReleaseName().charAt(0)+"").equals(arr);
-		System.out.println(containsHRR);
-		System.out.println(containsARR);
+		if ((verkoop.getReleaseName().charAt(0) + "").equals(hrr)) {
+			containsHRR = true;
+		}
+		if ((verkoop.getReleaseName().charAt(0) + "").equals(arr)) {
+			containsARR = true;
+		}
+
 	}
 
 	public Boolean getContainsHRR() {

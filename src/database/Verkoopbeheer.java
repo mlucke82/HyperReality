@@ -40,11 +40,17 @@ public class Verkoopbeheer {
 	 * 
 	 * @throws DatabaseException
 	 */
-	public static ArrayList<Verkoop> getVerkopen(String EAN) throws DatabaseException {
+	public static ArrayList<Verkoop> getVerkopen(String EAN, int year, int quarter) throws DatabaseException {
+		//System.out.println(year+" check");
+		//System.out.println(quarter+" check");
 		ArrayList<Verkoop> verkopen = new ArrayList<Verkoop>();
 		Verkoop verkoop = null;
+		//int check = year * 4 + quarter;
 		try {
 			prepGeefVerkoopData.setString(1, EAN);
+		//	prepGeefVerkoopData.setInt(2, check);
+		//	prepGeefVerkoopData.setInt(3, year);
+		//	prepGeefVerkoopData.setInt(4, quarter);
 			ResultSet res = prepGeefVerkoopData.executeQuery();
 			while (res.next()) {
 				verkoop = new Verkoop();

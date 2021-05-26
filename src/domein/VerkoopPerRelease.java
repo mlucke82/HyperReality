@@ -26,10 +26,10 @@ public class VerkoopPerRelease {
 	public ArrayList<VerkoopPerTrack> verkopenPerTrack;
 	public ArrayList<VerkoopPerArtiestPerRelease> verkopenPerArtiestPerRelease;
 
-	public VerkoopPerRelease(String ean) {
+	public VerkoopPerRelease(String ean, int year, int quarter) {
 
 		this.ean = ean;
-		getVerkopenPerEAN();
+		getVerkopenPerEAN(year, quarter);
 		releaseName = verkopenPerEan.get(0).getCatalog();
 		getTracksPerEAN();
 		getArtiesten();
@@ -41,9 +41,9 @@ public class VerkoopPerRelease {
 	}
 
 	// geeft alle verkoop regels voor de release
-	private void getVerkopenPerEAN() {
+	private void getVerkopenPerEAN(int year, int quarter) {
 		try {
-			this.verkopenPerEan = Verkoopbeheer.getVerkopen(ean);
+			this.verkopenPerEan = Verkoopbeheer.getVerkopen(ean, year, quarter);
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
