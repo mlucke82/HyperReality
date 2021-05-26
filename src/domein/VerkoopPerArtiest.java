@@ -19,6 +19,8 @@ public class VerkoopPerArtiest {
 	private int kwartaalTot = 0;
 	private ArrayList<VerkoopPerRelease> alleVerkopenPerRelease = new ArrayList<>();
 	private ArrayList<VerkoopPerArtiestPerRelease> alleReleasesPerArtiest = new ArrayList<>();
+	private Boolean containsHRR = false;
+	private Boolean containsARR = false;
 
 	public VerkoopPerArtiest(Artiest artiest, ArrayList<VerkoopPerRelease> alleVerkopenPerRelease) {
 
@@ -36,6 +38,7 @@ public class VerkoopPerArtiest {
 	private void getAlleArtiestOverzichten() {
 		for (int i = 0; i < alleVerkopenPerRelease.size(); i++) {
 			VerkoopPerRelease verkoop = alleVerkopenPerRelease.get(i);
+		
 			
 			for (int j = 0; j < verkoop.verkopenPerArtiestPerRelease.size(); j++) {
 				VerkoopPerArtiestPerRelease verkoopPerArtiestPerRelease = verkoop.verkopenPerArtiestPerRelease.get(j);
@@ -47,6 +50,7 @@ public class VerkoopPerArtiest {
 							alleVerkopenPerRelease.get(i).getKwartaalVanaf());
 					setDatumTot(alleVerkopenPerRelease.get(i).getJaarTot(),
 							alleVerkopenPerRelease.get(i).getKwartaalTot());
+					setBooleans(verkoop);
 				}
 			}
 		}
@@ -175,5 +179,21 @@ public class VerkoopPerArtiest {
 	public ArrayList<VerkoopPerArtiestPerRelease> getAlleReleasesPerArtiest() {
 		return alleReleasesPerArtiest;
 	}
+	
+	public void setBooleans(VerkoopPerRelease verkoop) {
+		String hrr = "H";
+		String arr = "A";
+		containsHRR = (verkoop.getReleaseName().charAt(0)+"").equals(hrr);
+		containsARR = (verkoop.getReleaseName().charAt(0)+"").equals(arr);
+		System.out.println(containsHRR);
+		System.out.println(containsARR);
+	}
 
+	public Boolean getContainsHRR() {
+		return containsHRR;
+	}
+
+	public Boolean getContainsARR() {
+		return containsARR;
+	}
 }
