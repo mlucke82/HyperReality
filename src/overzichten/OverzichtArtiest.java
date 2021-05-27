@@ -28,6 +28,7 @@ public class OverzichtArtiest {
 	private Font font = new Font(FontFamily.HELVETICA, 12, Font.BOLD);
 	private Font catFont = new Font(FontFamily.TIMES_ROMAN, 18, Font.BOLD);
 	private Font smallBold = new Font(FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+
 	// private Font textFont;
 
 	public OverzichtArtiest(VerkoopPerArtiest verkoop) {
