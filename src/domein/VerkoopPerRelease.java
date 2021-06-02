@@ -34,7 +34,7 @@ public class VerkoopPerRelease {
 		getTracksPerEAN();
 		getArtiesten();
 		bepaalVerkopenPerTrack();
-		bepaalVerkopenPerArtiestPerTrack();
+		bepaalVerkopenPerArtiestPerRelease();
 		bepaalTotalen();
 		new OverzichtRelease(this);
 
@@ -143,14 +143,14 @@ public class VerkoopPerRelease {
 		}
 	}
 
-	public void bepaalVerkopenPerArtiestPerTrack() {
-		// de arraylist met verkopenPerTrack wordt geinitialiseerd
+	public void bepaalVerkopenPerArtiestPerRelease() {
+		// de arraylist met verkopenPerRelease wordt geinitialiseerd
 		verkopenPerArtiestPerRelease = new ArrayList<>();
 
-		// voor iedere artiest wordt er een verkoopPerArtiestPerTrack aangemaakt
+		// voor iedere artiest wordt er een verkoopPerArtiestPerRelease aangemaakt
 		for (int i = 0; i < artiestenPerEan.size(); i++) {
 			VerkoopPerArtiestPerRelease verkoopPerArtiestPerRelease = new VerkoopPerArtiestPerRelease(artiestenPerEan.get(i));
-
+			
 			// er worden verkoopPerTrack en Tracks aangemaakt en deze worden gebruikt om de
 			// methoden aan te roepen
 			for (int j = 0; j < verkopenPerTrack.size(); j++) {
@@ -167,7 +167,7 @@ public class VerkoopPerRelease {
 					verkoopPerArtiestPerRelease.voegVerkoopToeArtiest(track, verkoopPerTrack);
 				}
 			}
-			// de verkoopPerArtiestPerTrack wordt toegevoegd aan de arraylist
+			// de verkoopPerArtiestPerRelease wordt toegevoegd aan de arraylist
 			verkopenPerArtiestPerRelease.add(verkoopPerArtiestPerRelease);
 		}
 	}

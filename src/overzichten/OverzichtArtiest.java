@@ -42,7 +42,7 @@ public class OverzichtArtiest {
 		this.verkopenPerArtiestPerRelease = verkoop.getAlleReleasesPerArtiest();
 		
 		document = new Document();
-		document.setMargins(20, 20, 160, 20);
+		document.setMargins(20, 20, 160, 100);
 
 		try {
 			FileOutputStream fos = new FileOutputStream(FILE + verkoop.getArtiestNaam() + ".pdf");
@@ -125,7 +125,9 @@ public class OverzichtArtiest {
 			table.addCell(ean);
 			table.addCell(profit);
 		}
-
+        
+		//table.setSplitLate(false);
+        //table.setBreakPoints(35);
 		document.add(table);
 		document.add(new Paragraph(" "));
 	}
