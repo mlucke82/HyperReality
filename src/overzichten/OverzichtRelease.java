@@ -5,13 +5,16 @@ import java.io.FileOutputStream;
 
 import java.util.ArrayList;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
 //import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
+//import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
 //import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -25,31 +28,32 @@ public class OverzichtRelease {
 	private VerkoopPerRelease verkoop;
 	private ArrayList<VerkoopPerTrack> verkopenPerTrack;
 	private String pound = "\u00a3";
-	private Font font = new Font(FontFamily.HELVETICA, 12, Font.BOLD);
+	private Font font = new Font(FontFamily.HELVETICA, 12, Font.NORMAL);
+	private Font fontBold = new Font(FontFamily.HELVETICA, 12, Font.BOLD);
 	private Font fontHalf = new Font(FontFamily.HELVETICA, 2, Font.NORMAL);
 	private String label = "";
 	// private Font textFont;
 
-	public OverzichtRelease(VerkoopPerRelease verkoop) {
+	public OverzichtRelease(VerkoopPerRelease verkoop, int year, int quarter) {
 
 		this.verkoop = verkoop;
 		this.verkopenPerTrack = verkoop.verkopenPerTrack;
 		document = new Document();
 		document.setMargins(20, 20, 160, 100);
 		isArr();
+		String datum = year + "_Q" + quarter;
 
 		try {
-			FileOutputStream fos = new FileOutputStream(FILE + label + "/" + verkoop.getReleaseName() + ".pdf");
+			FileOutputStream fos = new FileOutputStream(
+					FILE + label + "/" + verkoop.getReleaseName() + "_" + datum + ".pdf");
 			PdfWriter pdfWriter = PdfWriter.getInstance(document, fos);
 
 			HeaderAndFooterPdfPageEventRelease headerAndFooter = new HeaderAndFooterPdfPageEventRelease(verkoop);
 			pdfWriter.setPageEvent(headerAndFooter);
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -59,7 +63,6 @@ public class OverzichtRelease {
 			createTablePerTrack();
 			createTableTotaal();
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -93,20 +96,15 @@ public class OverzichtRelease {
 		PdfPTable table = new PdfPTable(columnWidths);
 		table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
 
-		table.addCell("Total Gross:");
-		table.addCell("Total Mastering:");
-		table.addCell("Total Promo:");
-		table.addCell("Total Net Profit:");
+		table.addCell(new Paragraph("Total Gross:", fontBold));
+		table.addCell(new Paragraph("Total Mastering:", fontBold));
+		table.addCell(new Paragraph("Total Promo:", fontBold));
+		table.addCell(new Paragraph("Total Net Profit:", fontBold));
 
-		Paragraph brutoOpbrengst = new Paragraph(pound + " " + String.format("%.2f", verkoop.getBrutoOpbrengst()),
-				font);
-		table.addCell(brutoOpbrengst);
-		Paragraph mastering = new Paragraph(pound + " " + String.format("%.2f", verkoop.getMastering()), font);
-		table.addCell(mastering);
-		Paragraph promo = new Paragraph(pound + " " + String.format("%.2f", verkoop.getPromo()), font);
-		table.addCell(promo);
-		Paragraph nettoOpbrengst = new Paragraph(pound + " " + String.format("%.2f", verkoop.getOpbrengst()), font);
-		table.addCell(nettoOpbrengst);
+		table.addCell(new Paragraph(pound + " " + String.format("%.2f", verkoop.getBrutoOpbrengst()), font));
+		table.addCell(new Paragraph(pound + " " + String.format("%.2f", verkoop.getMastering()), font));
+		table.addCell(new Paragraph(pound + " " + String.format("%.2f", verkoop.getPromo()), font));
+		table.addCell(new Paragraph(pound + " " + String.format("%.2f", verkoop.getOpbrengst()), font));
 		table.setTableEvent(new BorderEvent());
 
 		document.add(tableTitel);
@@ -124,51 +122,50 @@ public class OverzichtRelease {
 			float[] columnWidths = { 1, 5 };
 			PdfPTable tableName = new PdfPTable(columnWidths);
 			tableName.getDefaultCell().setBorder(Rectangle.NO_BORDER);
-			tableName.addCell("Trackname:");
-			Paragraph trackname = new Paragraph(verkopenPerTrack.get(i).getTrackname(), font);
-			tableName.addCell(trackname);
-			tableName.addCell("ISRC:");
-			Paragraph isrc = new Paragraph(verkopenPerTrack.get(i).getISRC(), font);
-			tableName.addCell(isrc);
+			tableName.addCell(new Paragraph("Trackname:", fontBold));
+			tableName.addCell(new Paragraph(verkopenPerTrack.get(i).getTrackname(), font));
+			tableName.addCell(new Paragraph("ISRC:", fontBold));
+			tableName.addCell(new Paragraph(verkopenPerTrack.get(i).getISRC(), font));
 
 			// table sales numbers
 
 			float[] columnWidthsSales = { 1, 1, 1 };
 			PdfPTable tableSales = new PdfPTable(columnWidthsSales);
 			tableSales.getDefaultCell().setBorder(Rectangle.NO_BORDER);
-			tableSales.addCell("AlbumDownloads:");
-			tableSales.addCell("Downloads:");
-			tableSales.addCell("Streams:");
+			tableSales.addCell(new Paragraph("AlbumDownloads:", fontBold));
+			tableSales.addCell(new Paragraph("Downloads:", fontBold));
+			tableSales.addCell(new Paragraph("Streams:", fontBold));
 
-			Paragraph albumDownloads = new Paragraph(verkopenPerTrack.get(i).getAlbumDownloads() + "", font);
-			tableSales.addCell(albumDownloads);
-			Paragraph downloads = new Paragraph(verkopenPerTrack.get(i).getDownloads() + "", font);
-			tableSales.addCell(downloads);
-			Paragraph streams = new Paragraph(verkopenPerTrack.get(i).getStreams() + "", font);
-			tableSales.addCell(streams);
+			tableSales.addCell(new Paragraph(verkopenPerTrack.get(i).getAlbumDownloads() + "", font));
+			tableSales.addCell(new Paragraph(verkopenPerTrack.get(i).getDownloads() + "", font));
+			tableSales.addCell(new Paragraph(verkopenPerTrack.get(i).getStreams() + "", font));
 
 			// table bedragen
 
 			float[] columnWidthsBedragen = { 1, 1, 1, 1 };
 			PdfPTable tableBedragen = new PdfPTable(columnWidthsBedragen);
 			tableBedragen.getDefaultCell().setBorder(Rectangle.NO_BORDER);
-			tableBedragen.addCell("Gross Profit:");
-			tableBedragen.addCell("Mastering Cost:");
-			tableBedragen.addCell("Promo Cost:");
-			tableBedragen.addCell("Net Profit:");
+			tableBedragen.addCell(new Paragraph("Gross Profit:", fontBold));
+			tableBedragen.addCell(new Paragraph("Mastering Cost:", fontBold));
+			tableBedragen.addCell(new Paragraph("Promo Cost:", fontBold));
+			//PdfPCell cell = new PdfPCell(new Paragraph("Net Profit:", fontBold));
+			//cell.setBackgroundColor(BaseColor.YELLOW);
+			tableBedragen.addCell(new Paragraph("Net Profit:", fontBold));
 
-			Paragraph brutoOpbrengst = new Paragraph(
-					pound + " " + String.format("%.2f", verkopenPerTrack.get(i).getBrutoOpbrengst()), font);
-			tableBedragen.addCell(brutoOpbrengst);
-			Paragraph mastering = new Paragraph(
-					pound + " " + String.format("%.2f", verkopenPerTrack.get(i).getMastering()), font);
-			tableBedragen.addCell(mastering);
-			Paragraph promo = new Paragraph(pound + " " + String.format("%.2f", verkopenPerTrack.get(i).getPromo()),
-					font);
-			tableBedragen.addCell(promo);
-			Paragraph nettoOpbrengst = new Paragraph(
-					pound + " " + String.format("%.2f", verkopenPerTrack.get(i).getOpbrengst()), font);
-			tableBedragen.addCell(nettoOpbrengst);
+			tableBedragen.addCell(new Paragraph(
+					pound + " " + String.format("%.2f", verkopenPerTrack.get(i).getBrutoOpbrengst()), font));
+			tableBedragen.addCell(
+					new Paragraph(pound + " " + String.format("%.2f", verkopenPerTrack.get(i).getMastering()), font));
+			tableBedragen.addCell(
+					new Paragraph(pound + " " + String.format("%.2f", verkopenPerTrack.get(i).getPromo()), font));
+			
+			//PdfPCell cell = new PdfPCell(new Paragraph(pound + " " + String.format("%.2f", verkopenPerTrack.get(i).getOpbrengst()), font));
+			//cell.setBackgroundColor(BaseColor.YELLOW);
+			
+			tableBedragen.addCell(
+					new Paragraph(pound + " " + String.format("%.2f", verkopenPerTrack.get(i).getOpbrengst()), font));
+			
+			//tableBedragen.addCell(cell);
 
 			// stop alles in de tabel
 			Paragraph emptyHalf = new Paragraph(" ", fontHalf);

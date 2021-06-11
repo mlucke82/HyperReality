@@ -33,10 +33,10 @@ public class VerkoopPerRelease {
 		releaseName = verkopenPerEan.get(0).getCatalog();
 		getTracksPerEAN();
 		getArtiesten();
-		bepaalVerkopenPerTrack();
+		bepaalVerkopenPerTrack(year, quarter);
 		bepaalVerkopenPerArtiestPerRelease();
 		bepaalTotalen();
-		new OverzichtRelease(this);
+		new OverzichtRelease(this, year, quarter);
 
 	}
 
@@ -99,7 +99,7 @@ public class VerkoopPerRelease {
 	}
 
 	// bepaald de verkoopcijfers per track over alle verkopen heen
-	public void bepaalVerkopenPerTrack() {
+	public void bepaalVerkopenPerTrack(int year, int quarter) {
 		// de arraylist met verkopenPerTrack wordt geinitialiseerd
 		verkopenPerTrack = new ArrayList<>();
 
@@ -117,17 +117,23 @@ public class VerkoopPerRelease {
 				if (verkoopPerTrack.getISRC().equals(track.getISRC())) {
 					for (int k = 0; k < verkopenPerEan.size(); k++) {
 						Verkoop verkoop = verkopenPerEan.get(k);
-						verkoopPerTrack.setJaarTot(verkoop);
-						verkoopPerTrack.setJaarVanaf(verkoop);
-						if (verkoop.getISRC().equals("null")) {
-							verkoopPerTrack.voegAlbumVerkoopToe(track, verkoop, tracksPerEan.size());
-							verkoopPerTrack.addAlbumDownload(verkoop.getQty());
-						} else if (verkoop.getISRC().equals(track.getISRC())) {
-							verkoopPerTrack.voegLosseVerkoopToe(track, verkoop);
-							if (verkoop.getFormat().equals("Stream")) {
-								verkoopPerTrack.addStream(verkoop.getQty());
-							} else {
-								verkoopPerTrack.addDownload(verkoop.getQty());
+
+						// hier wordt gechecked of een verkoop in de opgegeven periode ligt
+						// to do: veroorzaakt een bug bij HRR datumVanaf
+						if (verkoop.getYear() * 4 + verkoop.getQuarter() <= year * 4 + quarter) {
+
+							verkoopPerTrack.setJaarTot(verkoop);
+							verkoopPerTrack.setJaarVanaf(verkoop);
+							if (verkoop.getISRC().equals("null")) {
+								verkoopPerTrack.voegAlbumVerkoopToe(track, verkoop, tracksPerEan.size());
+								verkoopPerTrack.addAlbumDownload(verkoop.getQty());
+							} else if (verkoop.getISRC().equals(track.getISRC())) {
+								verkoopPerTrack.voegLosseVerkoopToe(track, verkoop);
+								if (verkoop.getFormat().equals("Stream")) {
+									verkoopPerTrack.addStream(verkoop.getQty());
+								} else {
+									verkoopPerTrack.addDownload(verkoop.getQty());
+								}
 							}
 						}
 					}
@@ -150,18 +156,19 @@ public class VerkoopPerRelease {
 
 		// voor iedere artiest wordt er een verkoopPerArtiestPerRelease aangemaakt
 		for (int i = 0; i < artiestenPerEan.size(); i++) {
-			VerkoopPerArtiestPerRelease verkoopPerArtiestPerRelease = new VerkoopPerArtiestPerRelease(artiestenPerEan.get(i));
-			
+			VerkoopPerArtiestPerRelease verkoopPerArtiestPerRelease = new VerkoopPerArtiestPerRelease(
+					artiestenPerEan.get(i));
+
 			// er worden verkoopPerTrack en Tracks aangemaakt en deze worden gebruikt om de
 			// methoden aan te roepen
 			for (int j = 0; j < verkopenPerTrack.size(); j++) {
 
 				VerkoopPerTrack verkoopPerTrack = verkopenPerTrack.get(j);
 				Track track = verkoopPerTrack.getTrack();
-				
-					verkoopPerArtiestPerRelease.setEan(ean);
-					verkoopPerArtiestPerRelease.setReleaseName(releaseName);
-				
+
+				verkoopPerArtiestPerRelease.setEan(ean);
+				verkoopPerArtiestPerRelease.setReleaseName(releaseName);
+
 				if (verkoopPerArtiestPerRelease.getArtiestCode().equals("101")) {
 					verkoopPerArtiestPerRelease.voegVerkoopToeHRR(track, verkoopPerTrack);
 				} else {

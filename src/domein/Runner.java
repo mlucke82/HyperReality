@@ -11,6 +11,7 @@ public class Runner {
 	public static void main(String[] args) throws DatabaseException {
 
 		Connectiebeheer.init();
+		// dit werkt nog niet, zie artiestOverzichten
 		FontFactory.register("resource/Elements.ttf");
 
 		// te zoeken release
@@ -23,7 +24,7 @@ public class Runner {
 		// getAlleReleaseOverzichten();
 		
 		// geeft alle artiest én release overzichten
-		getAlleOverzichten(2020, 3);
+		getAlleOverzichten(2020, 4);
 
 	}
 
@@ -42,7 +43,7 @@ public class Runner {
 			e.printStackTrace();
 		}
 		for (int i = 0; i < alleArtiesten.size(); i++) {
-			new VerkoopPerArtiest(alleArtiesten.get(i), alleVerkopenPerRelease);
+			new VerkoopPerArtiest(alleArtiesten.get(i), alleVerkopenPerRelease, year, quarter);
 		}
 
 	}

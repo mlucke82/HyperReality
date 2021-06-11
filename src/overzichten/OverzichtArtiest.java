@@ -40,7 +40,7 @@ public class OverzichtArtiest {
 
 	// private Font textFont;
 
-	public OverzichtArtiest(VerkoopPerArtiest verkoop) {
+	public OverzichtArtiest(VerkoopPerArtiest verkoop, int year, int quarter) {
 		
 		//BaseFont baseFont = font.getBaseFont();
 
@@ -49,9 +49,11 @@ public class OverzichtArtiest {
 
 		document = new Document();
 		document.setMargins(0, 0, 160, 100);
+		
+		String datum = year + "_Q" + quarter;
 
 		try {
-			FileOutputStream fos = new FileOutputStream(FILE + verkoop.getArtiestNaam() + ".pdf");
+			FileOutputStream fos = new FileOutputStream(FILE + verkoop.getArtiestNaam() + "_" + datum + ".pdf");
 			PdfWriter pdfWriter = PdfWriter.getInstance(document, fos);
 
 			HeaderAndFooterPdfPageEventArtist headerAndFooter = new HeaderAndFooterPdfPageEventArtist(verkoop);

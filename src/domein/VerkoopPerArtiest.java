@@ -22,7 +22,7 @@ public class VerkoopPerArtiest {
 	private Boolean containsHRR = false;
 	private Boolean containsARR = false;
 
-	public VerkoopPerArtiest(Artiest artiest, ArrayList<VerkoopPerRelease> alleVerkopenPerRelease) {
+	public VerkoopPerArtiest(Artiest artiest, ArrayList<VerkoopPerRelease> alleVerkopenPerRelease, int year, int quarter) {
 
 		this.alleVerkopenPerRelease = alleVerkopenPerRelease;
 		this.artiestCode = artiest.getArtiestCode();
@@ -31,8 +31,7 @@ public class VerkoopPerArtiest {
 		bepaalOpbrengst();
 		bepaalReedsBetaald();
 		bepaalNogTeBetalen();
-		new OverzichtArtiest(this);
-
+		new OverzichtArtiest(this, year, quarter);
 	}
 
 	private void getAlleArtiestOverzichten() {
