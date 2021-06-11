@@ -18,14 +18,16 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import domein.VerkoopPerArtiest;
 import domein.VerkoopPerArtiestPerRelease;
+import domein.VerkoopPerArtiestPerTrack;
 
 public class OverzichtArtiest {
 	private String FILE = "H:/HyperReality/PDFfromJava/Artists/";
 	private Document document;
 	private VerkoopPerArtiest verkoop;
 	private ArrayList<VerkoopPerArtiestPerRelease> verkopenPerArtiestPerRelease;
+	private ArrayList<VerkoopPerArtiestPerTrack> verkopenPerArtiestPerTrack;
 	private String pound = "\u00a3";
-	private Font font = new Font(FontFamily.HELVETICA, 12, Font.BOLD);
+	private Font font = new Font(FontFamily.HELVETICA, 10, Font.NORMAL);
 	private Font catFont = new Font(FontFamily.TIMES_ROMAN, 18, Font.BOLD);
 	private Font smallBold = new Font(FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 
@@ -40,9 +42,10 @@ public class OverzichtArtiest {
 
 		this.verkoop = verkoop;
 		this.verkopenPerArtiestPerRelease = verkoop.getAlleReleasesPerArtiest();
-		
+
 		document = new Document();
-		document.setMargins(20, 20, 160, 100);
+		//document.setMargins(20, 20, 160, 100);
+		document.setMargins(0, 0, 160, 100);
 
 		try {
 			FileOutputStream fos = new FileOutputStream(FILE + verkoop.getArtiestNaam() + ".pdf");
@@ -59,8 +62,8 @@ public class OverzichtArtiest {
 			e.printStackTrace();
 		}
 
-	//	this.verkoop = verkoop;
-	//	this.verkopenPerArtiestPerRelease = verkoop.getAlleReleasesPerArtiest();
+		// this.verkoop = verkoop;
+		// this.verkopenPerArtiestPerRelease = verkoop.getAlleReleasesPerArtiest();
 		document.open();
 		addMetaData(document);
 		try {
@@ -107,27 +110,40 @@ public class OverzichtArtiest {
 
 	private void createTableReleases() throws DocumentException {
 
-		float[] columnWidths = { 2, 2, 1 };
+		float[] columnWidths = { 1, 4, 1, 1 };
 		PdfPTable table = new PdfPTable(columnWidths);
 		table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
 		table.setTableEvent(new BorderEvent());
 
-		table.addCell("Catalog:");
-		table.addCell("EAN:");
-		table.addCell("Profit:");
+		table.addCell(new Paragraph("Catalog:", smallBold));
+		table.addCell(new Paragraph("Trackname:", smallBold));
+		table.addCell(new Paragraph("Your Pct.:", smallBold));
+		table.addCell(new Paragraph("Your Profit:", smallBold));
 
 		for (int i = 0; i < verkopenPerArtiestPerRelease.size(); i++) {
-			Paragraph catalog = new Paragraph(verkopenPerArtiestPerRelease.get(i).getReleaseName(), font);
-			Paragraph ean = new Paragraph(verkopenPerArtiestPerRelease.get(i).getEan(), font);
-			Paragraph profit = new Paragraph(
-					pound + " " + String.format("%.2f", verkopenPerArtiestPerRelease.get(i).getOpbrengst()), font);
-			table.addCell(catalog);
-			table.addCell(ean);
-			table.addCell(profit);
+			verkopenPerArtiestPerTrack = verkopenPerArtiestPerRelease.get(i).getVerkopenPerArtiestPerTrack();
+			for (int j = 0; j < verkopenPerArtiestPerTrack.size(); j++) {
+
+				if (verkopenPerArtiestPerTrack.get(j).getPercentage() > 0) {
+
+					//Paragraph catalog = new Paragraph(verkopenPerArtiestPerRelease.get(i).getReleaseName(), font);
+					//Paragraph trackname = new Paragraph(verkopenPerArtiestPerTrack.get(j).getTrackTitle(), font);
+					//Paragraph percentage = new Paragraph(verkopenPerArtiestPerTrack.get(j).getPercentage() + "", font);
+					//Paragraph profit = new Paragraph(
+						//	pound + " " + String.format("%.2f", verkopenPerArtiestPerTrack.get(j).getOpbrengst()),
+						//	font);
+					table.addCell(new Paragraph(verkopenPerArtiestPerRelease.get(i).getReleaseName(), font));
+					table.addCell(new Paragraph(verkopenPerArtiestPerTrack.get(j).getTrackTitle(), font));
+					table.addCell(new Paragraph(verkopenPerArtiestPerTrack.get(j).getPercentage() + "", font));
+					table.addCell(new Paragraph(
+							pound + " " + String.format("%.2f", verkopenPerArtiestPerTrack.get(j).getOpbrengst()),
+							font));
+				}
+			}
 		}
-        
-		//table.setSplitLate(false);
-        //table.setBreakPoints(35);
+
+		// table.setSplitLate(false);
+		// table.setBreakPoints(35);
 		document.add(table);
 		document.add(new Paragraph(" "));
 	}
@@ -139,18 +155,18 @@ public class OverzichtArtiest {
 		table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
 		table.setTableEvent(new BorderEvent());
 
-		table.addCell("Total Profit:");
+		table.addCell(new Paragraph("Total Profit:", smallBold));
 		table.addCell(" ");
-		Paragraph opbrengst = new Paragraph(pound + " " + String.format("%.2f", verkoop.getOpbrengst()), font);
+		Paragraph opbrengst = new Paragraph(pound + " " + String.format("%.2f", verkoop.getOpbrengst()), smallBold);
 		table.addCell(opbrengst);
-		table.addCell("Already Paid:");
+		table.addCell(new Paragraph("Already Paid:", smallBold));
 		table.addCell(" ");
-		Paragraph betaald = new Paragraph(pound + " " + String.format("%.2f", verkoop.getReedsBetaald()), font);
+		Paragraph betaald = new Paragraph(pound + " " + String.format("%.2f", verkoop.getReedsBetaald()), smallBold);
 		table.addCell(betaald);
-		table.addCell("Remaining:");
+		table.addCell(new Paragraph("Remaining:", smallBold));
 		table.addCell(" ");
 		Paragraph nogTeBetalen = new Paragraph(
-				pound + " " + String.format("%.2f", verkoop.getOpbrengst() - verkoop.getReedsBetaald()), font);
+				pound + " " + String.format("%.2f", verkoop.getOpbrengst() - verkoop.getReedsBetaald()), smallBold);
 		table.addCell(nogTeBetalen);
 
 		document.add(table);

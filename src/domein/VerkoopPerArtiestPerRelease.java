@@ -49,7 +49,7 @@ public class VerkoopPerArtiestPerRelease {
 		Opbrengst = Opbrengst + bedrag;
 
 		verkopenPerArtiestPerTrack
-				.add(new VerkoopPerArtiestPerTrack(releaseName, track.getTrackname(), "101", percentageHRR, Opbrengst));
+				.add(new VerkoopPerArtiestPerTrack(releaseName, track.getTrackname(), "101", percentageHRR, bedrag));
 
 	}
 
@@ -92,7 +92,7 @@ public class VerkoopPerArtiestPerRelease {
 		Opbrengst = Opbrengst + bedrag;
 
 		verkopenPerArtiestPerTrack.add(
-				new VerkoopPerArtiestPerTrack(releaseName, track.getTrackname(), artiestCode, percentage, Opbrengst));
+				new VerkoopPerArtiestPerTrack(releaseName, track.getTrackname(), artiestCode, percentage, bedrag));
 
 	}
 
