@@ -24,7 +24,7 @@ public class Runner {
 		// getAlleReleaseOverzichten();
 		
 		// geeft alle artiest én release overzichten
-		getAlleOverzichten(2020, 4);
+		getAlleOverzichten(2021, 1);
 
 	}
 
