@@ -31,6 +31,7 @@ class HeaderAndFooterPdfPageEventRelease extends PdfPageEventHelper {
 	private Boolean isARR = false;
 	private Font catFont = new Font(FontFamily.TIMES_ROMAN, 18, Font.BOLD);
 	private Font smallBold = new Font(FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+	private Font superSmall = new Font(FontFamily.TIMES_ROMAN, 8, Font.NORMAL);
 	private Image image;
 
 	public HeaderAndFooterPdfPageEventRelease(VerkoopPerRelease verkoop) {
@@ -107,23 +108,43 @@ class HeaderAndFooterPdfPageEventRelease extends PdfPageEventHelper {
 	
 	public void createFooter(PdfWriter pdfWriter, Document document) {
 
-		Paragraph pageNumber = new Paragraph(String.format("Page %d", pdfWriter.getPageNumber()), smallBold);
-		Paragraph datum = new Paragraph("" + new Date(), smallBold);
+		//Paragraph pageNumber = new Paragraph(String.format("Page %d", pdfWriter.getPageNumber()), smallBold);
+		//Paragraph datum = new Paragraph("" + new Date(), smallBold);
 		
+		//float[] columnWidths = { 1 };
+		//PdfPTable tableLinks = new PdfPTable(columnWidths);
+		//tableLinks.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+		//tableLinks.setTotalWidth(200);
+
+		//tableLinks.addCell(pageNumber);
+		//tableLinks.writeSelectedRows(0, -1, 10, 30, pdfWriter.getDirectContent());
+			
+		//PdfPTable tableRechts = new PdfPTable(columnWidths);
+		//tableRechts.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+		//tableRechts.setTotalWidth(200);
+
+		//tableRechts.addCell(datum);
+		//tableRechts.writeSelectedRows(0, -1, 420, 30, pdfWriter.getDirectContent());
+		
+		Paragraph subScript = new Paragraph(
+				"----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n"
+						+ "                                         To request payment, please send an invoice to info@hyperrealityrecords.nl for payment to your Bank Account or PayPal. \n"
+						+ "                   All amounts referred to in this overview are in Pounds Sterling (GBP), and all amounts owing under this overview shall be paid in Pounds Sterling (GBP). \n"
+						+ "                                        All amounts denominated in other currencies (if any) shall be converted with the Exchange Rate on the date of calculation. \n\n"
+						+ "                         Please keep in mind that a small PayPal or Bank fee can be applied to cross-border payments or when a payment is done in a foreign currency. \n\n"
+						+ "                                                 If you have any queries or concerns please direct these to us and we will get back to you as soon as possible. \n"
+						+ "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+				superSmall);
+		
+		// Paragraph datum = new Paragraph("" + new Date(), smallBold);
+
 		float[] columnWidths = { 1 };
 		PdfPTable tableLinks = new PdfPTable(columnWidths);
 		tableLinks.getDefaultCell().setBorder(Rectangle.NO_BORDER);
-		tableLinks.setTotalWidth(200);
+		tableLinks.setTotalWidth(600);
 
-		tableLinks.addCell(pageNumber);
-		tableLinks.writeSelectedRows(0, -1, 10, 30, pdfWriter.getDirectContent());
-			
-		PdfPTable tableRechts = new PdfPTable(columnWidths);
-		tableRechts.getDefaultCell().setBorder(Rectangle.NO_BORDER);
-		tableRechts.setTotalWidth(200);
-
-		tableRechts.addCell(datum);
-		tableRechts.writeSelectedRows(0, -1, 420, 30, pdfWriter.getDirectContent());
+		tableLinks.addCell(subScript);
+		tableLinks.writeSelectedRows(0, -1, 10, 100, pdfWriter.getDirectContent());
 
 	}
 }

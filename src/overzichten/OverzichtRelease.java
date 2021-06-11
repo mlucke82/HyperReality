@@ -32,15 +32,10 @@ public class OverzichtRelease {
 
 	public OverzichtRelease(VerkoopPerRelease verkoop) {
 
-		// this code should run once at initialization/application startup
-		// FontFactory.register("resource/Elements.ttf");
-		// textFont = FontFactory.getFont("Elements", BaseFont.IDENTITY_H,
-		// BaseFont.EMBEDDED, 12); //10 is the size
-
 		this.verkoop = verkoop;
 		this.verkopenPerTrack = verkoop.verkopenPerTrack;
 		document = new Document();
-		document.setMargins(20, 20, 160, 20);
+		document.setMargins(20, 20, 160, 100);
 		isArr();
 
 		try {

@@ -5,13 +5,16 @@ import java.io.FileOutputStream;
 
 import java.util.ArrayList;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.FontFactory;
 //import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
 //import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -27,24 +30,24 @@ public class OverzichtArtiest {
 	private ArrayList<VerkoopPerArtiestPerRelease> verkopenPerArtiestPerRelease;
 	private ArrayList<VerkoopPerArtiestPerTrack> verkopenPerArtiestPerTrack;
 	private String pound = "\u00a3";
-	private Font font = new Font(FontFamily.HELVETICA, 10, Font.NORMAL);
+	//private Font font = new Font(FontFamily.HELVETICA, 10, Font.NORMAL);
 	private Font catFont = new Font(FontFamily.TIMES_ROMAN, 18, Font.BOLD);
 	private Font smallBold = new Font(FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+	//werkt nog niet echt
+	private Font customFont = FontFactory.getFont("resource/Elements.ttf",
+		    BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 10, Font.NORMAL, BaseColor.BLACK);
+		
 
 	// private Font textFont;
 
 	public OverzichtArtiest(VerkoopPerArtiest verkoop) {
-
-		// this code should run once at initialization/application startup
-		// FontFactory.register("resource/Elements.ttf");
-		// textFont = FontFactory.getFont("Elements", BaseFont.IDENTITY_H,
-		// BaseFont.EMBEDDED, 12); //10 is the size
+		
+		//BaseFont baseFont = font.getBaseFont();
 
 		this.verkoop = verkoop;
 		this.verkopenPerArtiestPerRelease = verkoop.getAlleReleasesPerArtiest();
 
 		document = new Document();
-		//document.setMargins(20, 20, 160, 100);
 		document.setMargins(0, 0, 160, 100);
 
 		try {
@@ -55,15 +58,11 @@ public class OverzichtArtiest {
 			pdfWriter.setPageEvent(headerAndFooter);
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		// this.verkoop = verkoop;
-		// this.verkopenPerArtiestPerRelease = verkoop.getAlleReleasesPerArtiest();
 		document.open();
 		addMetaData(document);
 		try {
@@ -126,24 +125,16 @@ public class OverzichtArtiest {
 
 				if (verkopenPerArtiestPerTrack.get(j).getPercentage() > 0) {
 
-					//Paragraph catalog = new Paragraph(verkopenPerArtiestPerRelease.get(i).getReleaseName(), font);
-					//Paragraph trackname = new Paragraph(verkopenPerArtiestPerTrack.get(j).getTrackTitle(), font);
-					//Paragraph percentage = new Paragraph(verkopenPerArtiestPerTrack.get(j).getPercentage() + "", font);
-					//Paragraph profit = new Paragraph(
-						//	pound + " " + String.format("%.2f", verkopenPerArtiestPerTrack.get(j).getOpbrengst()),
-						//	font);
-					table.addCell(new Paragraph(verkopenPerArtiestPerRelease.get(i).getReleaseName(), font));
-					table.addCell(new Paragraph(verkopenPerArtiestPerTrack.get(j).getTrackTitle(), font));
-					table.addCell(new Paragraph(verkopenPerArtiestPerTrack.get(j).getPercentage() + "", font));
+					table.addCell(new Paragraph(verkopenPerArtiestPerRelease.get(i).getReleaseName(), customFont));
+					table.addCell(new Paragraph(verkopenPerArtiestPerTrack.get(j).getTrackTitle(), customFont));
+					table.addCell(new Paragraph(verkopenPerArtiestPerTrack.get(j).getPercentage() + " %", customFont));
 					table.addCell(new Paragraph(
 							pound + " " + String.format("%.2f", verkopenPerArtiestPerTrack.get(j).getOpbrengst()),
-							font));
+							customFont));
 				}
 			}
 		}
 
-		// table.setSplitLate(false);
-		// table.setBreakPoints(35);
 		document.add(table);
 		document.add(new Paragraph(" "));
 	}

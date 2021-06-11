@@ -2,6 +2,8 @@ package domein;
 
 import java.util.ArrayList;
 
+import com.itextpdf.text.FontFactory;
+
 import database.*;
 
 public class Runner {
@@ -9,6 +11,7 @@ public class Runner {
 	public static void main(String[] args) throws DatabaseException {
 
 		Connectiebeheer.init();
+		FontFactory.register("resource/Elements.ttf");
 
 		// te zoeken release
 		// String eanCode = "5054281527027";
