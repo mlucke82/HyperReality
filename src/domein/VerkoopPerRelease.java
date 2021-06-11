@@ -108,6 +108,7 @@ public class VerkoopPerRelease {
 			VerkoopPerTrack verkoopPerTrack = new VerkoopPerTrack(tracksPerEan.get(i));
 
 			// voor iedere aanwezige track wordt een track aangemaakt
+			// to do: kan naar hierboven
 			for (int j = 0; j < tracksPerEan.size(); j++) {
 				Track track = tracksPerEan.get(j);
 

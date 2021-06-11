@@ -1,5 +1,7 @@
 package domein;
 
+import java.util.ArrayList;
+
 public class VerkoopPerArtiestPerRelease {
 
 	private String artiestNaam;
@@ -7,6 +9,7 @@ public class VerkoopPerArtiestPerRelease {
 	private String releaseName;
 	private String ean;
 	private double Opbrengst = 0.0;
+	private ArrayList<VerkoopPerArtiestPerTrack> verkopenPerArtiestPerTrack = new ArrayList<>();
 
 	public VerkoopPerArtiestPerRelease(Artiest artiest) {
 		this.artiestNaam = artiest.getNaam();
@@ -45,11 +48,16 @@ public class VerkoopPerArtiestPerRelease {
 
 		Opbrengst = Opbrengst + bedrag;
 
+		verkopenPerArtiestPerTrack
+				.add(new VerkoopPerArtiestPerTrack(releaseName, track.getTrackname(), "101", percentageHRR, Opbrengst));
+
 	}
 
 	public void voegVerkoopToeArtiest(Track track, VerkoopPerTrack verkoopTotaalPerTrack) {
 
 		double bedrag = 0.0;
+
+		int percentage = 0;
 
 		if (track.getArtiest2Key() == null) {
 			track.setArtiest2Key("");
@@ -62,25 +70,32 @@ public class VerkoopPerArtiestPerRelease {
 		}
 
 		if (track.getArtiest1Key().equals(artiestCode)) {
-			bedrag = verkoopTotaalPerTrack.getOpbrengst() * track.getArtiest1Perc() / 100;
+			percentage = track.getArtiest1Perc();
+			bedrag = verkoopTotaalPerTrack.getOpbrengst() * percentage / 100;
 		}
 
 		if (track.getArtiest2Key().equals(artiestCode)) {
-			bedrag = verkoopTotaalPerTrack.getOpbrengst() * track.getArtiest2Perc() / 100;
+			percentage = track.getArtiest2Perc();
+			bedrag = verkoopTotaalPerTrack.getOpbrengst() * percentage / 100;
 		}
 
 		if (track.getRemixer1Key().equals(artiestCode)) {
-			bedrag = verkoopTotaalPerTrack.getOpbrengst() * track.getRemixer1Perc() / 100;
+			percentage = track.getRemixer1Perc();
+			bedrag = verkoopTotaalPerTrack.getOpbrengst() * percentage / 100;
 		}
 
 		if (track.getRemixer2Key().equals(artiestCode)) {
-			bedrag = verkoopTotaalPerTrack.getOpbrengst() * track.getRemixer2Perc() / 100;
+			percentage = track.getRemixer2Perc();
+			bedrag = verkoopTotaalPerTrack.getOpbrengst() * percentage / 100;
 		}
 
 		Opbrengst = Opbrengst + bedrag;
 
+		verkopenPerArtiestPerTrack.add(
+				new VerkoopPerArtiestPerTrack(releaseName, track.getTrackname(), artiestCode, percentage, Opbrengst));
+
 	}
-	
+
 	public void setReleaseName(String releaseName) {
 		this.releaseName = releaseName;
 	}
@@ -95,6 +110,10 @@ public class VerkoopPerArtiestPerRelease {
 
 	public String getEan() {
 		return ean;
+	}
+
+	public ArrayList<VerkoopPerArtiestPerTrack> getVerkopenPerArtiestPerTrack() {
+		return verkopenPerArtiestPerTrack;
 	}
 
 }
